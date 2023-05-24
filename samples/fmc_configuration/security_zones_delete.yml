@@ -1,0 +1,14 @@
+- hosts: all
+  connection: httpapi
+  tasks:
+    - name: Get Domain UUID
+      cisco.fmcansible.fmc_configuration:
+        operation: getAllDomain
+        register_as: domain
+
+    - name: Delete security zone - Inside
+      cisco.fmcansible.fmc_configuration:
+        operation: deleteSecurityZoneObject
+        path_params:
+          domainUUID: '{{ domain[0].uuid }}'
+          objectId: '{{ SecurityZone_ini5.id }}'

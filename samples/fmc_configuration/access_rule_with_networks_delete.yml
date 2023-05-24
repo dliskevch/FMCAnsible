@@ -1,0 +1,24 @@
+- hosts: all
+  connection: httpapi
+  tasks:
+    - name: Get Domain
+      cisco.fmcansible.fmc_configuration:
+        operation: getAllDomain
+        register_as: domain
+
+    - name: Get Access Policy
+      cisco.fmcansible.fmc_configuration:
+        operation: getAllAccessPolicy
+        path_params:
+          domainUUID: '{{ domain[0].uuid }}'
+        filters:
+          name: NGFW-Access-Policy25
+        register_as: accesspolicy
+
+    - name: Delete the access rule allowing trafic from/to Cisco DevNet
+      cisco.fmcansible.fmc_configuration:
+        operation: deleteAccessRule
+        path_params:
+          objectId: '{{ AccessRule_allowciscotraffic8.id }}'
+          containerUUID: '{{ accesspolicy[0].id }}'
+          domainUUID: '{{ domain[0].uuid }}'

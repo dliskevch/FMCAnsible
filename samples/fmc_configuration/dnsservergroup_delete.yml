@@ -1,0 +1,14 @@
+- hosts: all
+  connection: httpapi
+  tasks:
+    - name: Get Domain UUID
+      cisco.fmcansible.fmc_configuration:
+        operation: getAllDomain
+        register_as: domain
+
+    - name: Delete FQDN network for Cisco DevNet
+      cisco.fmcansible.fmc_configuration:
+        operation: deleteDNSServerGroupObject
+        path_params:
+          domainUUID: '{{ domain[0].uuid }}'
+          objectId: '{{ DNSServerGroupObject_dnsgroup2.id }}'

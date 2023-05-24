@@ -10,8 +10,8 @@
       cisco.fmcansible.fmc_configuration:
         operation: getAllDevice
         path_params:
-          domainUUID: '{{ domain[0].uuid }}' 
-        register_as: device_list 
+          domainUUID: '{{ domain[0].uuid }}'
+        register_as: device_list
 
     - name: Get Physical Interfaces
       cisco.fmcansible.fmc_configuration:
@@ -28,8 +28,8 @@
           ifname: outside
           ipv4:
             static:
-              address: 192.168.10.4
-              netmask: 255.255.255.0
+              address: "{{ outside_ip | default('192.168.10.4') }}"
+              netmask: "{{ outside_netmask | default('255.255.255.0') }}"
           MTU: 1500
           enabled: True
           mode: NONE
@@ -47,8 +47,8 @@
           ifname: inside
           ipv4:
             static:
-              address: 192.168.20.2
-              netmask: 255.255.255.0
+              address: "{{ inside_ip | default('192.168.20.2') }}"
+              netmask: "{{ inside_netmask | default('255.255.255.0') }}"
           MTU: 1500
           enabled: True
           mode: NONE
